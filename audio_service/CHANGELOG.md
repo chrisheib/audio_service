@@ -3,6 +3,10 @@
 * Remove deprecated BackgroundAudioTask API.
 * BREAKING: playbackState.copyWith no longer changes updateTime by default.
 
+## 0.18.14
+
+* Support rxdart 0.28.x.
+
 ## 0.18.13
 
 * Fix Android NPE in sendNotificationClicked and onConnected.
