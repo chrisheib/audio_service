@@ -3,6 +3,11 @@
 * Remove deprecated BackgroundAudioTask API.
 * BREAKING: playbackState.copyWith no longer changes updateTime by default.
 
+## 0.18.15
+
+* Add deep link support for FlutterFragmentActivity (@jan-milovanovic).
+* Fix JDK 21 compile error.
+
 ## 0.18.14
 
 * Support rxdart 0.28.x.
