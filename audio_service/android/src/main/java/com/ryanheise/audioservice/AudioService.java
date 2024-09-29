@@ -46,6 +46,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.flutter.embedding.engine.FlutterEngine;
+import io.flutter.Log;
 
 public class AudioService extends MediaBrowserServiceCompat {
     public static final String CONTENT_STYLE_SUPPORTED = "android.media.browse.CONTENT_STYLE_SUPPORTED";
@@ -434,16 +435,25 @@ public class AudioService extends MediaBrowserServiceCompat {
 
     PendingIntent buildMediaButtonPendingIntent(long action) {
         int keyCode = toKeyCode(action);
-        if (keyCode == KeyEvent.KEYCODE_UNKNOWN)
-            return null;
-        Intent intent = new Intent(this, MediaButtonReceiver.class);
-        intent.setAction(Intent.ACTION_MEDIA_BUTTON);
-        intent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, keyCode));
-        int flags = 0;
-        if (Build.VERSION.SDK_INT >= 23) {
-            flags |= PendingIntent.FLAG_IMMUTABLE;
+        Log.i("MYDEB buildMediaButtonPendingIntent", "action: " + action + ", keycode: " + keyCode);
+        if (keyCode != KeyEvent.KEYCODE_UNKNOWN) {
+            Intent intent = new Intent(this, MediaButtonReceiver.class);
+            intent.setAction(Intent.ACTION_MEDIA_BUTTON);
+            intent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, keyCode));
+            int flags = 0;
+            if (Build.VERSION.SDK_INT >= 23) {
+                flags |= PendingIntent.FLAG_IMMUTABLE;
+            }
+            return PendingIntent.getBroadcast(this, keyCode, intent, flags);
+        } else {
+            Intent intent = new Intent(this, MediaButtonReceiver.class);
+            intent.setAction("com.ryanheise.audioservice." + action);
+            int flags = 0;
+            if (Build.VERSION.SDK_INT >= 23) {
+                flags |= PendingIntent.FLAG_IMMUTABLE;
+            }
+            return PendingIntent.getBroadcast(this, keyCode, intent, flags);
         }
-        return PendingIntent.getBroadcast(this, keyCode, intent, flags);
     }
 
     PendingIntent buildDeletePendingIntent() {
